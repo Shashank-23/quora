@@ -3,7 +3,7 @@ package com.upgrad.quora.api.controller;
 import com.upgrad.quora.api.model.SigninResponse;
 import com.upgrad.quora.api.model.SignupUserRequest;
 import com.upgrad.quora.api.model.SignupUserResponse;
-import com.upgrad.quora.service.business.UserService;
+import com.upgrad.quora.service.business.SignUpUserService;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.Base64;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private SignUpUserService signUPUserService;
 
     @PostMapping(name = "/user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signup(SignupUserRequest signupUserRequest) throws SignUpRestrictedException {
@@ -38,7 +38,7 @@ public class UserController {
         // role should be nonadmin  by default
         userEntity.setRole("nonadmin");
 
-        UserEntity createdUser = userService.signupUser(userEntity);
+        UserEntity createdUser = signUPUserService.signupUser(userEntity);
 
         SignupUserResponse signupUserResponse = new SignupUserResponse();
         signupUserResponse.id(createdUser.getUuid()).status("USER SUCCESSFULLY REGISTERED");
