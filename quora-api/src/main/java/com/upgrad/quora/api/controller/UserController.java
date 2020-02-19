@@ -1,5 +1,6 @@
 package com.upgrad.quora.api.controller;
 
+import com.upgrad.quora.api.model.SigninResponse;
 import com.upgrad.quora.api.model.SignupUserRequest;
 import com.upgrad.quora.api.model.SignupUserResponse;
 import com.upgrad.quora.service.business.UserService;
@@ -10,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Base64;
 
 @RestController("/")
 public class UserController {
@@ -40,6 +44,21 @@ public class UserController {
         signupUserResponse.id(createdUser.getUuid()).status("USER SUCCESSFULLY REGISTERED");
 
        return new ResponseEntity<>(signupUserResponse, HttpStatus.CREATED) ;
+
+    }
+
+    @PostMapping(name = "/user/signin",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<SigninResponse> signup(@RequestHeader("authorization") final String token)  {
+        String encryptedUsernamePass = token.split("Basic")[1];
+        String  decryptedUsernamePass  = Base64.getDecoder().decode(encryptedUsernamePass).toString();
+
+
+        UserEntity createdUser = userService.signupUser(userEntity);
+
+        SignupUserResponse signupUserResponse = new SignupUserResponse();
+        signupUserResponse.id(createdUser.getUuid()).status("USER SUCCESSFULLY REGISTERED");
+
+        return new ResponseEntity<>(signupUserResponse, HttpStatus.CREATED) ;
 
     }
 
