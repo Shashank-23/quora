@@ -13,7 +13,10 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
+
+    @Autowired
+    private PasswordCryptographyProvider passwordCryptographyProvider;
 
     @Transactional
     public UserEntity signupUser(UserEntity userEntity) throws SignUpRestrictedException {
@@ -24,12 +27,15 @@ public class UserService {
         boolean usernameExists = false;
         boolean emaiIdExists = false;
 
+        //checking for existing username
         for (UserEntity u : existingUsers){
             if(usernameToBeSignedUp.equalsIgnoreCase(u.getUsername())){
                 usernameExists = true;
                 break;
             }
         }
+
+        //checking for existing email
         for (UserEntity u : existingUsers){
             if(emaiIdToBeSignedUp.equalsIgnoreCase(u.getEmail())){
                 emaiIdExists = true;
@@ -37,8 +43,10 @@ public class UserService {
             }
         }
 
-
         if(usernameExists == false && emaiIdExists ==false){
+            String[] encryptedText = passwordCryptographyProvider.encrypt(userEntity.getPassword());
+            userEntity.setSalt(encryptedText[0]);
+            userEntity.setPassword(encryptedText[1]);
             return userDAO.createUser(userEntity);
         }
         else if(usernameExists == true && emaiIdExists == true)
