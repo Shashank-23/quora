@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 @NamedQueries(
         {
                 @NamedQuery(name = "getUsers", query = "select  u from UserEntity u"),
+                @NamedQuery(name = "getUserByEmail", query = "select u from UserEntity u where u.email =:email"),
+                @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username =:username")
         }
 )
 public class UserEntity {
