@@ -1,11 +1,11 @@
 package com.upgrad.quora.service.business;
 
-import com.upgrad.quora.service.dao.UserDao;
+import com.upgrad.quora.service.dao.UserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 public class CommonBusinessService {
 
 
     @Autowired
-    UserDao userDao;
+    UserDAO userDao;
 }
