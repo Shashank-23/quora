@@ -12,7 +12,12 @@ import java.io.Serializable;
 @Table(name = "users", uniqueConstraints ={@UniqueConstraint(columnNames = {"userName","email"})})
 
 @NamedQueries(
-                {@NamedQuery(name = "userByUuid", query = "select u from UsersEntity u where u.uuid = :uuid")}
+                {@NamedQuery(name = "userByUuid", query = "select u from UsersEntity u where u.uuid = :uuid"),
+
+                        @NamedQuery(name = "getUsers", query = "select  u from UsersEntity u"),
+                        @NamedQuery(name = "getUserByEmail", query = "select u from UsersEntity u where u.email =:email"),
+                        @NamedQuery(name = "getUserByUsername", query = "select u from UsersEntity u where u.userName =:username")
+                }
 
                  )
 public class UsersEntity implements Serializable {

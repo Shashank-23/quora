@@ -1,8 +1,8 @@
 package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.dao.UserDAO;
-import com.upgrad.quora.service.entity.UserAuthTokenEntity;
-import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.entity.UserAuthEntity;
+import com.upgrad.quora.service.entity.UsersEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,15 +21,18 @@ public class AuthenticationService {
     PasswordCryptographyProvider passwordCryptographyProvider;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserAuthTokenEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
-        UserEntity userEntity = userDAO.getUserByUsername(username);
+//    public UserAuthTokenEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
+        public UserAuthEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
+//        UserEntity userEntity = userDAO.getUserByUsername(username);
+        UsersEntity userEntity = userDAO.getUserByUsername(username);
         if (userEntity == null) {
             throw new AuthenticationFailedException("ATH-001", "This username does not exist");
         }
         String encryptedPassword = passwordCryptographyProvider.encrypt(password, userEntity.getSalt());
         if (encryptedPassword.equals(userEntity.getPassword())) {
 
-            UserAuthTokenEntity userAuthToken = new UserAuthTokenEntity();
+//            UserAuthTokenEntity userAuthToken = new UserAuthTokenEntity();
+            UserAuthEntity userAuthToken = new UserAuthEntity();
             JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
             ZonedDateTime now = ZonedDateTime.now();
             final ZonedDateTime expiresAt = now.plusHours(8);
@@ -42,7 +45,8 @@ public class AuthenticationService {
 //            userAuthToken.setCreatedBy("api-backend");
 //            userAuthToken.setCreatedAt(now);
 
-            UserAuthTokenEntity authToken = userDAO.createAuthToken(userAuthToken);
+//            UserAuthTokenEntity authToken = userDAO.createAuthToken(userAuthToken);
+            UserAuthEntity authToken = userDAO.createAuthToken(userAuthToken);
 //            userEntity.setLastLoginAt(now);
 //            userDAO.updateUserEntity(userEntity);
 

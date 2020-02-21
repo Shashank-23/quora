@@ -1,7 +1,7 @@
 package com.upgrad.quora.service.business;
 
 import com.upgrad.quora.service.dao.UserDAO;
-import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.entity.UsersEntity;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,24 +19,28 @@ public class SignUpUserService {
     private PasswordCryptographyProvider passwordCryptographyProvider;
 
     @Transactional
-    public UserEntity signupUser(UserEntity userEntity) throws SignUpRestrictedException {
+//    public UserEntity signupUser(UserEntity userEntity) throws SignUpRestrictedException {
+        public UsersEntity signupUser(UsersEntity userEntity) throws SignUpRestrictedException {
 
-        String usernameToBeSignedUp = userEntity.getUsername();
+        String usernameToBeSignedUp = userEntity.getUserName();
         String emaiIdToBeSignedUp = userEntity.getEmail();
-        List<UserEntity> existingUsers = userDAO.getUsersList();
+//        List<UserEntity> existingUsers = userDAO.getUsersList();
+        List<UsersEntity> existingUsers = userDAO.getUsersList();
         boolean usernameExists = false;
         boolean emaiIdExists = false;
 
         //checking for existing username
-        for (UserEntity u : existingUsers){
-            if(usernameToBeSignedUp.equalsIgnoreCase(u.getUsername())){
+        for (UsersEntity u : existingUsers){
+//            for (UserEntity u : existingUsers){
+            if(usernameToBeSignedUp.equalsIgnoreCase(u.getUserName())){
                 usernameExists = true;
                 break;
             }
         }
 
         //checking for existing email
-        for (UserEntity u : existingUsers){
+        for (UsersEntity u : existingUsers){
+//            for (UserEntity u : existingUsers){
             if(emaiIdToBeSignedUp.equalsIgnoreCase(u.getEmail())){
                 emaiIdExists = true;
                 break;

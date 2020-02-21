@@ -3,15 +3,15 @@ package com.upgrad.quora.service.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "users")
-@NamedQueries(
-        {
-                @NamedQuery(name = "getUsers", query = "select  u from UserEntity u"),
-                @NamedQuery(name = "getUserByEmail", query = "select u from UserEntity u where u.email =:email"),
-                @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username =:username")
-        }
-)
+//@Entity
+//@Table(name = "users")
+//@NamedQueries(
+//        {
+//                @NamedQuery(name = "getUsers", query = "select  u from UserEntity u"),
+//                @NamedQuery(name = "getUserByEmail", query = "select u from UserEntity u where u.email =:email"),
+//                @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username =:username")
+//        }
+//)
 public class UserEntity {
 
     @Id
