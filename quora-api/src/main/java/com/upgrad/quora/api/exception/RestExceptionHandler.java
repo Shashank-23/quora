@@ -54,4 +54,11 @@ public class RestExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse().code(exception.getCode()).message(exception.getErrorMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(SignOutRestrictedException.class)
+    public ResponseEntity<ErrorResponse> signOutException(SignOutRestrictedException exception, WebRequest request){
+        ErrorResponse errorResponse = new ErrorResponse().code(exception.getCode()).message(exception.getErrorMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
 }

@@ -39,4 +39,9 @@ public class QuestionDao {
         List<QuestionEntity> questionEntities = entityManager.createNamedQuery("getAllQuestionsByUser",QuestionEntity.class).setParameter("userEntity",usersEntity).getResultList();
         return questionEntities;
     }
+
+    public QuestionEntity createQuestion(QuestionEntity questionEntity) {
+        entityManager.persist(questionEntity);
+        return questionEntity;
+    }
 }

@@ -11,8 +11,11 @@ import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 //This is service class for QuestionController.
 
@@ -71,6 +74,27 @@ public class QuestionBusinessService {
         //Returning the list of questionEntities.
         List<QuestionEntity> questionEntities = questionDao.getAllQuestionsByUser(usersEntity);
         return questionEntities;
+    }
+
+    @Transactional
+    public QuestionEntity createQuestion(QuestionEntity questionEntity, String accessToken) throws AuthorizationFailedException {
+
+        UserAuthEntity userAuthEntity = userAuthDao.getAuthToken(accessToken);
+
+        if (userAuthEntity == null){//Chekcing if user is not signed in
+            throw new AuthorizationFailedException("ATHR-001","User has not signed in");
+        }else if (userAuthEntity.getLogoutAt() != null){//checking if user is signed out
+            throw new AuthorizationFailedException("ATHR-002","User is signed out.Sign in first to post a question");
+        }
+        else{
+            UserAuthEntity authenticatedUser = userDao.isAccessTokenPresent(accessToken);
+
+            questionEntity.setUuid(UUID.randomUUID().toString());
+            questionEntity.setDate(ZonedDateTime.now());
+            questionEntity.setUser(authenticatedUser.getUser());
+            return questionDao.createQuestion(questionEntity);
+        }
+
     }
 
 }

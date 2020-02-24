@@ -70,6 +70,18 @@ public class UserDAO {
         return entityManager.createNamedQuery("getUsers",UsersEntity.class).getResultList();
     }
 
+    public UserAuthEntity isAccessTokenPresent(String accessToken){
+        try {
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken",UserAuthEntity.class).setParameter("accessToken",accessToken).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public UserAuthEntity updatelogOutTime(UserAuthEntity userAuthEntity){
+        entityManager.merge(userAuthEntity);
+        return userAuthEntity;
+    }
 
 }
 
